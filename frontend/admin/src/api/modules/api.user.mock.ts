@@ -23,7 +23,7 @@ export default [
         data: {
           id: 1,
           username: "username",
-          nickName: "admin"
+          nickname: "admin"
         }
       };
     }

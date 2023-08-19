@@ -55,8 +55,8 @@ async def do_transaction(task):
     事务处理，需要await等待完成
     task: 事务内执行的任务
     """
-    async for session_wrapper in get_session_wrapper():
-        return await task(session_wrapper=session_wrapper)
+    session = async_db.create_session()
+    return await transaction(session, task)
 
 
 def async_transaction(*tasks: any):

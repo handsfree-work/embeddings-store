@@ -1,14 +1,9 @@
 import datetime
-from typing import List
-import loguru
-import pydantic
+
 import sqlalchemy
-from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.exc import MissingGreenlet
-from sqlalchemy.orm import Mapped as SQLAlchemyMapped, mapped_column as sqlalchemy_mapped_column, Mapped, relationship
+from sqlalchemy.orm import mapped_column as mapped_column, Mapped
 from sqlalchemy.sql import functions as sqlalchemy_functions
 
-from src.modules.account.models.db.role import Role, RoleEntity
 from src.modules.base.models.schemas.base import BaseSchemaModel
 from src.repository.schema import SelectOptions
 from src.repository.table import Base
@@ -25,13 +20,13 @@ class RolePermissionEntity(BaseSchemaModel):
 class RolePermission(Base):  # type: ignore
     __tablename__ = "sys_role_permission"
 
-    id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(primary_key=True, autoincrement="auto")
-    role_id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(sqlalchemy.Integer(), nullable=False, unique=False)
-    permission_id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(sqlalchemy.Integer(), nullable=False, unique=False)
-    created_at: SQLAlchemyMapped[datetime.datetime] = sqlalchemy_mapped_column(
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
+    role_id: Mapped[int] = mapped_column(sqlalchemy.Integer(), nullable=False, unique=False)
+    permission_id: Mapped[int] = mapped_column(sqlalchemy.Integer(), nullable=False, unique=False)
+    created_at: Mapped[datetime.datetime] = mapped_column(
         sqlalchemy.DateTime(timezone=True), nullable=False, server_default=sqlalchemy_functions.now()
     )
-    updated_at: SQLAlchemyMapped[datetime.datetime] = sqlalchemy_mapped_column(
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         sqlalchemy.DateTime(timezone=True),
         nullable=True,
         server_onupdate=sqlalchemy.schema.FetchedValue(for_update=True),

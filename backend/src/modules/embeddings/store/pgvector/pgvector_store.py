@@ -19,6 +19,10 @@ class Document(Base):
     __tablename__ = 'document'
 
     id = mapped_column(Integer, primary_key=True)
+    collection_id = mapped_column(Integer)
+    source_id = mapped_column(Integer)
+    source_index = mapped_column(Integer)
+    title = mapped_column(Text)
     content = mapped_column(Text)
     embedding = mapped_column(Vector(1536))
 

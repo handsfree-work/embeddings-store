@@ -1,5 +1,6 @@
+//@ts-ignore
 import { request } from "/src/api/service";
-const apiPrefix = "/admin/authority/user";
+const apiPrefix = "/admin/embeddings/collection";
 export async function GetList(query: any) {
   return request({
     url: apiPrefix + "/page",

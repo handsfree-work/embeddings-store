@@ -1,7 +1,7 @@
 <template>
   <fs-page class="page-sys-user">
     <template #header>
-      <div class="title">用户管理</div>
+      <div class="title">集合管理</div>
     </template>
     <fs-crud ref="crudRef" v-bind="crudBinding" />
   </fs-page>
@@ -12,7 +12,7 @@ import { defineComponent, ref, onMounted } from "vue";
 import { useCrud, useExpose, useFs } from "@fast-crud/fast-crud";
 import createCrudOptions from "./crud";
 export default defineComponent({
-  name: "AuthorityUser",
+  name: "EmbeddingsCollection",
   setup() {
     // 初始化crud配置
     // 此处传入权限前缀进行通用按钮权限设置，会通过commonOptions去设置actionbar和rowHandle的按钮的show属性

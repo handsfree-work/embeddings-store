@@ -12,7 +12,7 @@ export interface LoginReq {
 export interface UserInfoRes {
   id: string | number;
   username: string;
-  nickName: string;
+  nickname: string;
 }
 
 export interface LoginRes {

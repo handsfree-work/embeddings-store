@@ -51,8 +51,8 @@ export function responseError(data = {}, msg = "请求失败", code = 500) {
 export function errorLog(error: any) {
   // 打印到控制台
   console.error(error);
-  let message = error.messag;
-  if (error.response?.data) {
+  let message = error.message;
+  if (error.response?.data?.message) {
     message = error.response.data.message;
   }
   // 显示提示

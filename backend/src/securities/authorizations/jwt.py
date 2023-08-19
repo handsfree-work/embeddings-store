@@ -4,7 +4,7 @@ import pydantic
 from jose import jwt as jose_jwt, JWTError as JoseJWTError
 
 from src.config.manager import settings
-from src.modules.account.models.db.user import User
+from src.modules.account.models.db.user import User, UserEntity
 from src.modules.base.models.schemas.jwt import JWTAccount, JWToken
 from src.utilities.exceptions.database import EntityDoesNotExist
 from src.utilities.exceptions.http.exc_401 import http_exc_401
@@ -32,13 +32,11 @@ class JWTGenerator:
 
         return jose_jwt.encode(to_encode, key=settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 
-    def generate_access_token(self, account: User) -> str:
+    def generate_access_token(self, account: UserEntity) -> str:
         if not account:
             raise EntityDoesNotExist(f"Cannot generate JWT token for without Account entity!")
 
-        #  将rolelist 转为id list
-        roles = account.roles
-        role_ids = [role.id for role in roles]
+        role_ids = account.roles if account.roles else []
         jwt_account = JWTAccount(id=account.id, username=account.username, email=account.email, roles=role_ids)
         return self._generate_jwt_token(
             jwt_data=jwt_account.model_dump(),

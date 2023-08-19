@@ -1,7 +1,6 @@
 import openai
 from pgvector.sqlalchemy import Vector
-from sentence_transformers import SentenceTransformer
-from sqlalchemy import create_engine, insert, select, text, Integer, String, Text
+from sqlalchemy import create_engine, insert, select, text, Integer, Text
 from sqlalchemy.orm import declarative_base, mapped_column, Session
 
 from src.config.config import settings

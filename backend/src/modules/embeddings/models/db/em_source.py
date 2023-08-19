@@ -1,12 +1,8 @@
 import datetime
-from typing import List
 
-import pydantic
 import sqlalchemy
-from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.exc import MissingGreenlet
-from sqlalchemy.orm import Mapped as SQLAlchemyMapped, mapped_column as sqlalchemy_mapped_column, Mapped, relationship
-from sqlalchemy.sql import functions as sqlalchemy_functions
+from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.sql import functions
 
 from src.modules.base.models.schemas.base import BaseSchemaModel
 from src.repository.schema import SelectOptions
@@ -24,28 +20,28 @@ class EmSourceEntity(BaseSchemaModel):
     file_type: str | None = None
     content: str | None = None
     collection_id: int | None = None
+    md5: str | None = None
     status: str | None = None
 
 
 class EmSource(Base):
     __tablename__ = "em_source"
 
-    id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(primary_key=True, autoincrement="auto")
-    created_at: SQLAlchemyMapped[datetime.datetime] = sqlalchemy_mapped_column(
-        sqlalchemy.DateTime(timezone=True), nullable=False, server_default=sqlalchemy_functions.now()
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
+    created_at: Mapped[datetime.datetime] = mapped_column(
+        sqlalchemy.DateTime(timezone=True), nullable=False, server_default=functions.now()
     )
-    updated_at: SQLAlchemyMapped[datetime.datetime] = sqlalchemy_mapped_column(
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         sqlalchemy.DateTime(timezone=True), nullable=True,
         server_onupdate=sqlalchemy.schema.FetchedValue(for_update=True),
     )
-
-    name: SQLAlchemyMapped[str] = sqlalchemy_mapped_column(sqlalchemy.String(length=64), nullable=False, unique=True)
-    title: SQLAlchemyMapped[str] = sqlalchemy_mapped_column(sqlalchemy.String(length=64), nullable=False,
-                                                            unique=False)
-    file_type: SQLAlchemyMapped[str] = sqlalchemy_mapped_column(sqlalchemy.String(length=64), nullable=False,
-                                                                unique=False)
-    collection_id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(sqlalchemy.Integer(), nullable=False)
-    status: SQLAlchemyMapped[str] = sqlalchemy_mapped_column(sqlalchemy.String(length=64), nullable=True, unique=False)
+    collection_id: Mapped[int] = mapped_column(sqlalchemy.Integer(), nullable=False)
+    name: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=False)
+    title: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=False)
+    file_type: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=False)
+    content: Mapped[str] = mapped_column(sqlalchemy.Text(), nullable=False)
+    status: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=True)
+    md5: Mapped[str] = mapped_column(sqlalchemy.String(length=256), nullable=True)
 
     __mapper_args__ = {"eager_defaults": True}
 

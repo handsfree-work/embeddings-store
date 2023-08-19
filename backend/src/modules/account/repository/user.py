@@ -78,18 +78,9 @@ class UserRepository(BaseCRUDRepository[User, UserEntity]):
 
         return query.scalar()
 
-    async def read_user_by_password_authentication(self, account_login: UserInLogin) -> User:
-        db_account = None
-        try:
-            stmt = sqlalchemy.select(User).where(
-                User.username == account_login.username
-            ).options(selectinload(User.roles))
-            query = await self.get_session().execute(statement=stmt)
-            db_account = query.scalar()
-        except Exception as e:
-            loguru.logger.exception(e)
-
-        if not db_account:
+    async def read_user_by_password_authentication(self, account_login: UserInLogin) -> UserEntity:
+        db_account = await self.get_user_by_username(account_login.username)
+        if db_account is None:
             raise EntityDoesNotExist("Wrong username or wrong email!")
 
         loguru.logger.error("password:{}", pwd_generator.generate_hashed_password(
@@ -99,7 +90,9 @@ class UserRepository(BaseCRUDRepository[User, UserEntity]):
                                                        hashed_password=db_account.hashed_password):
             raise PasswordDoesNotMatch("Password does not match!")
 
-        return db_account
+        entity = db_account.to_entity()
+        entity.role_ids = await self.get_role_ids(db_account.id)
+        return entity
 
     async def update_account_by_id(self, id: int, account_update: UserInUpdate) -> User:
         new_account_data = account_update.model_dump()
@@ -179,10 +172,13 @@ class UserRepository(BaseCRUDRepository[User, UserEntity]):
 
     async def get_with_role_ids(self, id: int):
         user = await self.get(id=id)
-        user_roles = await self.user_role_repo.find(condition=UserRoleEntity(user_id=id))
-        role_ids = [user_role.role_id for user_role in user_roles]
+        role_ids = await self.get_role_ids(id)
         user.role_ids = role_ids
         return user
+
+    async def get_role_ids(self, id):
+        user_roles = await self.user_role_repo.find(condition=UserRoleEntity(user_id=id))
+        return [user_role.role_id for user_role in user_roles]
 
     async def update_with_roles(self, id, user):
         await self.update(id=id, entity=user)
@@ -190,3 +186,8 @@ class UserRepository(BaseCRUDRepository[User, UserEntity]):
         for role_id in user.role_ids:
             await self.user_role_repo.create(UserRoleEntity(user_id=id, role_id=role_id))
         pass
+
+    async def get_user_by_username(self, username):
+        stmt = sqlalchemy.select(User).where(User.username == username)
+        query = await self.get_session().execute(statement=stmt)
+        return query.scalar()

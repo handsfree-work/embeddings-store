@@ -1,3 +1,4 @@
+//@ts-ignore
 import LayoutPass from "/src/layout/layout-pass.vue";
 
 export const embeddingsResources = [
@@ -13,14 +14,14 @@ export const embeddingsResources = [
     },
     children: [
       {
-        title: "用户管理",
-        name: "user",
+        title: "集合管理",
+        name: "embeddings-collection",
         meta: {
           icon: "ion:person-outline",
-          permission: "authority:user:view"
+          permission: "embeddings:collection:view"
         },
-        path: "/sys/authority/user",
-        component: "/sys/authority/user/index.vue"
+        path: "/embeddings/collection",
+        component: "/embeddings/collection/index.vue"
       }
     ]
   }

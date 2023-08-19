@@ -1,7 +1,7 @@
 import datetime
 
 import sqlalchemy
-from sqlalchemy.orm import Mapped as SQLAlchemyMapped, mapped_column as sqlalchemy_mapped_column
+from sqlalchemy.orm import Mapped as Mapped, mapped_column as mapped_column
 from sqlalchemy.sql import functions as sqlalchemy_functions
 
 from src.modules.base.models.schemas.base import BaseSchemaModel
@@ -12,20 +12,20 @@ from src.repository.table import Base
 class Permission(Base):  # type: ignore
     __tablename__ = "sys_permission"
 
-    id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(primary_key=True, autoincrement="auto")
-    title: SQLAlchemyMapped[str] = sqlalchemy_mapped_column(
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement="auto")
+    title: Mapped[str] = mapped_column(
         sqlalchemy.String(length=64), nullable=False, unique=False
     )
-    code: SQLAlchemyMapped[str] = sqlalchemy_mapped_column(
+    code: Mapped[str] = mapped_column(
         sqlalchemy.String(length=64), nullable=False, unique=True
     )
-    parent_id: SQLAlchemyMapped[int] = sqlalchemy_mapped_column(
+    parent_id: Mapped[int] = mapped_column(
         sqlalchemy.Integer(), nullable=False, unique=False
     )
-    created_at: SQLAlchemyMapped[datetime.datetime] = sqlalchemy_mapped_column(
+    created_at: Mapped[datetime.datetime] = mapped_column(
         sqlalchemy.DateTime(timezone=True), nullable=False, server_default=sqlalchemy_functions.now()
     )
-    updated_at: SQLAlchemyMapped[datetime.datetime] = sqlalchemy_mapped_column(
+    updated_at: Mapped[datetime.datetime] = mapped_column(
         sqlalchemy.DateTime(timezone=True),
         nullable=True,
         server_onupdate=sqlalchemy.schema.FetchedValue(for_update=True),

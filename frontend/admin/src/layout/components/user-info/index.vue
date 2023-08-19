@@ -1,6 +1,6 @@
 <template>
   <a-dropdown>
-    <div class="fs-user-info">您好，{{ userStore.getUserInfo?.nickName }}</div>
+    <div class="fs-user-info">您好，{{ userStore.getUserInfo?.nickname }}</div>
     <template #overlay>
       <a-menu>
         <a-menu-item>

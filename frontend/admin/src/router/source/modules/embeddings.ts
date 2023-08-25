@@ -5,8 +5,8 @@ export const embeddingsResources = [
   {
     title: "嵌入管理",
     name: "embeddings",
-    path: "/embeddings",
-    redirect: "/embeddings/tes",
+    path: "embeddings",
+    redirect: "/embeddings/collection",
     component: LayoutPass,
     meta: {
       icon: "ion:settings-outline",
@@ -14,15 +14,27 @@ export const embeddingsResources = [
     },
     children: [
       {
-        title: "集合管理",
+        title: "知识库管理",
         name: "embeddings-collection",
         meta: {
           icon: "ion:person-outline",
           permission: "embeddings:collection:view"
         },
         path: "/embeddings/collection",
-        component: "/embeddings/collection/index.vue"
-      }
+        component: "/embeddings/collection/index.vue",
+      },
+      {
+        title: "知识库详情",
+        name: "embeddings-collection-index",
+        meta: {
+          icon: "ion:person-outline",
+          permission: "embeddings:collection:view",
+          isMenu:false
+        },
+        path: "collection/detail",
+        component: "/embeddings/collection/detail/index.vue",
+      },
+
     ]
   }
 ];

@@ -32,3 +32,5 @@ async def search(
     vector_store = await vector_store_factory.get_vector_store()
     res = await vector_store.search(query="test", top_k=10)
     return RestfulRes.success_list(data=res)
+
+

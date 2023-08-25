@@ -5,10 +5,10 @@ specifiers:
   '@ant-design/icons-vue': ^6.1.0
   '@aws-sdk/client-s3': ^3.383.0
   '@aws-sdk/s3-request-presigner': ^3.383.0
-  '@fast-crud/fast-crud': ^1.16.0
-  '@fast-crud/fast-extends': ^1.16.0
-  '@fast-crud/ui-antdv4': ^1.16.0
-  '@fast-crud/ui-interface': ^1.16.0
+  '@fast-crud/fast-crud': ^1.16.7
+  '@fast-crud/fast-extends': ^1.16.7
+  '@fast-crud/ui-antdv4': ^1.16.7
+  '@fast-crud/ui-interface': ^1.16.7
   '@iconify/iconify': ^3.1.1
   '@iconify/json': ^2.2.98
   '@purge-icons/generated': ^0.9.0
@@ -98,10 +98,10 @@ dependencies:
   '@ant-design/icons-vue': 6.1.0_vue@3.3.4
   '@aws-sdk/client-s3': 3.387.0
   '@aws-sdk/s3-request-presigner': 3.387.0
-  '@fast-crud/fast-crud': 1.16.0_vue@3.3.4
-  '@fast-crud/fast-extends': 1.16.0_vue@3.3.4
-  '@fast-crud/ui-antdv4': 1.16.0
-  '@fast-crud/ui-interface': 1.16.0
+  '@fast-crud/fast-crud': 1.16.7_vue@3.3.4
+  '@fast-crud/fast-extends': 1.16.7_vue@3.3.4
+  '@fast-crud/ui-antdv4': 1.16.7
+  '@fast-crud/ui-interface': 1.16.7
   '@iconify/iconify': 3.1.1
   '@iconify/json': 2.2.100
   '@purge-icons/generated': 0.9.0
@@ -2685,8 +2685,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@fast-crud/fast-crud/1.16.0_vue@3.3.4:
-    resolution: {integrity: sha512-liFwzWA3WbpwXtCwOy70FRbCF/rgkiVeWbRpa5iW/goLjbRHHB1crbn6kW+a97LLMkd1Ag0BBvn0EvubHa+BNA==}
+  /@fast-crud/fast-crud/1.16.7_vue@3.3.4:
+    resolution: {integrity: sha512-nxKY+e3rbxgnhnxNbk+48/NRRo2PYmXGcrKDHIQolnza9m/oRt6kPLbXFlA+NZol0MmP2A9fXLpi2+MbdOD6Ww==}
     dependencies:
       file-saver: 2.0.5
       lru-cache: 10.0.0
@@ -2696,8 +2696,8 @@ packages:
       - vue
     dev: false
 
-  /@fast-crud/fast-extends/1.16.0_vue@3.3.4:
-    resolution: {integrity: sha512-ShoZaW0313qHRkrw57/cjpgGx2btkOf0ZIEKgvoJqbaXYWn9MEO/nfErnRF2uIw5Z8ceSymoQAKXhDgmvW04UQ==}
+  /@fast-crud/fast-extends/1.16.7_vue@3.3.4:
+    resolution: {integrity: sha512-YOPkboUBZAxCFxKLLoXW2RqEd3jFPLJOGYtcu5uC8XExRGZQa9IG+bYhr838NGXxQFUjQIUdaxpntirCww22Sw==}
     dependencies:
       '@aws-sdk/client-s3': 3.387.0_4tbaxmgnqlfm4hvank5kfttw4y
       '@aws-sdk/s3-request-presigner': 3.387.0_4tbaxmgnqlfm4hvank5kfttw4y
@@ -2727,12 +2727,12 @@ packages:
       - vue
     dev: false
 
-  /@fast-crud/ui-antdv4/1.16.0:
-    resolution: {integrity: sha512-pB4b49oE/dEiERKW6ySmOsKmy+7jMmGOUKAsYDWOPLiAigWunhmGTSn+jrUuuufHNYDjvwaazSppKCuzsS31mw==}
+  /@fast-crud/ui-antdv4/1.16.7:
+    resolution: {integrity: sha512-+12kYa3CAgV3WA47HC3t+HyDiOAybhYv72R3fn3hDTxOWfM4NoRv6iDX37dIsshtx2JMWRMuH8XoPSbUV8nFYQ==}
     dev: false
 
-  /@fast-crud/ui-interface/1.16.0:
-    resolution: {integrity: sha512-6gwrNaZ3nvuM11e2SZazuz8gejf9/MZZCIvR7qHD63IRq08EvUk8qMsBET2ZoQfZhtW3tk55Ks54vBqduY2OCA==}
+  /@fast-crud/ui-interface/1.16.7:
+    resolution: {integrity: sha512-/0ulZmkeY4VAzN3gENJEaKHMTCr9BPdmcuwh9gmmVcm8jpFDqwiiiqBndPG1PjxU4Nzou1ihf4wYLrUnhZXToQ==}
     dependencies:
       lodash-es: 4.17.21
     dev: false

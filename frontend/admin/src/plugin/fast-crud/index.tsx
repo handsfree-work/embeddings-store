@@ -113,6 +113,28 @@ function install(app: any, options: any = {}) {
           wrapperCol: {
             span: null
           }
+        },
+        columns:{
+          created_at: {
+            title: "创建时间",
+            type: "datetime",
+            order:1000,
+            form: { show: false }, // 表单配置
+            column: {
+              width: 180,
+              sorter: true
+            }
+          },
+          updated_at: {
+            title: "修改时间",
+            type: "datetime",
+            order:1000,
+            form: { show: false }, // 表单配置
+            column: {
+              sortable: "update_time",
+              width: 180
+            }
+          },
         }
       };
 

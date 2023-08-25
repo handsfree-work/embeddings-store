@@ -1,10 +1,11 @@
-import { defineStore } from "pinia";
-import { cloneDeep, get, uniq } from "lodash-es";
+import {defineStore} from "pinia";
+import {cloneDeep, get, uniq} from "lodash-es";
 import router from "/src/router";
-import { frameworkRoutes } from "/src/router/resolve";
+import {frameworkRoutes} from "/src/router/resolve";
 // @ts-ignore
-import { LocalStorage } from "/src/utils/util.storage";
-import { useUserStore } from "/src/store/modules/user";
+import {LocalStorage} from "/src/utils/util.storage";
+import {useUserStore} from "/src/store/modules/user";
+
 const OPENED_CACHE_KEY = "TABS_OPENED";
 
 interface PageState {
@@ -125,6 +126,20 @@ export const usePageStore = defineStore({
       // 设置数据
 
       LocalStorage.set(this.getStorageKey(), this.opened);
+    },
+    updateTitle({index,fullPath,title}:any){
+     let current:any =null
+      if(index){
+        current = this.opened[index];
+      }else{
+        if(fullPath==null){
+          fullPath = this.current
+        }
+        current = this.opened.find((page, index) => {
+          return page.fullPath === fullPath;
+        })
+      }
+      current.meta!.title = title
     },
     /**
      * @class opened

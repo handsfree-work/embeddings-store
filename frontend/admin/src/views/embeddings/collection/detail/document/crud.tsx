@@ -1,6 +1,5 @@
 import * as api from "./api";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, dict, EditReq, UserPageQuery, UserPageRes } from "@fast-crud/fast-crud";
-import {useRouter} from "vue-router";
 
 export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOptionsRet {
   const pageRequest = async (query: UserPageQuery): Promise<UserPageRes> => {
@@ -18,7 +17,6 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
     return await api.AddObj(form);
   };
 
-  const router = useRouter()
   return {
     crudOptions: {
       request: {
@@ -36,6 +34,9 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
           x: 1400
         }
       },
+      toolbar:{
+        compact:false
+      },
       columns: {
         id: {
           title: "id",
@@ -48,7 +49,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
         },
         key: {
           title: "集合Key",
-          type: "link",
+          type: "text",
           search: { show: true }, // 开启查询
           form: {
             rules: [
@@ -58,19 +59,12 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
           },
           editForm: { component: { disabled: true } },
           column: {
-            sorter: true,
-            component:{
-              on:{
-                onClick({row}){
-                  router.push({path:`/embeddings/collection/detail`,query:{id:row.id}})
-                }
-              }
-            }
+            sorter: true
           }
         },
         title: {
           title: "集合名称",
-          type: "link",
+          type: "text",
           search: { show: true }, // 开启查询
           form: {
             rules: [
@@ -80,14 +74,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
           },
           editForm: { component: { disabled: true } },
           column: {
-            sorter: true,
-            component:{
-              on:{
-                onClick({row}){
-                  router.push({path:`/embeddings/collection/detail`,query:{id:row.id}})
-                }
-              }
-            }
+            sorter: true
           }
         },
         remark: {

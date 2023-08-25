@@ -41,5 +41,4 @@ class RoleRepository(BaseCRUDRepository[Role, RoleEntity]):
             all.append(create_bean)
 
         session.add_all(all)
-        session.bulk_insert_mappings(RolePermission, all)
         await session.flush()

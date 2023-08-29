@@ -69,9 +69,9 @@ async def source_update(
         repo: SourceRepository = Depends(get_repository(repo_type=SourceRepository)),
 ) -> EmSourceEntity:
     try:
-        for_update = await repo.update_with_roles(source.id, source)
+        for_update = await repo.update(source.id, source)
     except EntityDoesNotExist:
-        return RestfulRes.error(message="集合不存在")
+        return RestfulRes.error(message="source不存在")
 
     return RestfulRes.success(data=for_update)
 
@@ -99,4 +99,17 @@ async def source_delete(
         repo: SourceRepository = fastapi.Depends(get_repository(repo_type=SourceRepository))
 ) -> RestfulRes[str]:
     await repo.delete(id=id)
+    return RestfulRes.success()
+
+
+@router.post(path="/import",
+             name="embeddings:source:import",
+             dependencies=[Depends(PermissionChecker(per="account:source:import"))],
+             response_model=RestfulRes[str],
+             status_code=fastapi.status.HTTP_200_OK)
+async def source_import(
+        id: int,
+        repo: SourceRepository = fastapi.Depends(get_repository(repo_type=SourceRepository))
+) -> RestfulRes[str]:
+    await repo.do_import(id)
     return RestfulRes.success()

@@ -1,6 +1,6 @@
 //@ts-ignore
 import { request } from "/src/api/service";
-const apiPrefix = "/admin/embeddings/document";
+const apiPrefix = "/admin/embeddings/collection";
 export async function GetList(query: any) {
   return request({
     url: apiPrefix + "/page",
@@ -35,7 +35,7 @@ export async function DelObj(id: any) {
 
 export async function GetObj(id: any) {
   return request({
-    url: apiPrefix + "/info",
+    url: apiPrefix + "/get",
     method: "post",
     params: { id }
   });

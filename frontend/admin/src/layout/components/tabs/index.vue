@@ -3,7 +3,9 @@
     <div class="fs-multiple-page-control-content">
       <div class="fs-multiple-page-control-content-inner">
         <a-tabs class="fs-multiple-page-control fs-multiple-page-sort" :active-key="page.getCurrent" type="editable-card" hide-add @tabClick="handleClick" @edit="handleTabEdit">
-          <a-tab-pane v-for="item in page.getOpened" :key="item.fullPath" :tab="item.meta?.title || '未命名'" :name="item.fullPath" :closable="isTabClosable(item)" />
+          <a-tab-pane v-for="item in page.getOpened" :key="item.fullPath" :name="item.fullPath" :closable="isTabClosable(item)">
+            <template #tab> <fs-icon v-if="item.meta?.icon" :icon="item.meta?.icon" /> {{ item.meta?.title || "未命名" }} </template>
+          </a-tab-pane>
         </a-tabs>
         <!--        <fs-contextmenu v-model:visible="contextmenuFlag" :x="contentmenuX" :y="contentmenuY">-->
         <!--          <fs-contextmenu-list-->
@@ -19,7 +21,7 @@
         <span class="iconify" data-icon="ion:close-circle" data-inline="false"></span>
         <template #icon><DownOutlined /></template>
         <template #overlay>
-          <a-menu @click="(command:any) => handleControlItemClick(command)">
+          <a-menu @click="(command: any) => handleControlItemClick(command)">
             <a-menu-item key="left">
               <fs-icon name="arrow-left" class="fs-mr-10" />
               关闭左侧
@@ -210,6 +212,13 @@ export default {
   .ant-tabs-bar {
     margin: 0;
     border-bottom: 1px solid #f0f0f0;
+  }
+  .ant-tabs-tab-btn {
+    display: flex;
+    align-items: center;
+    .fs-icon {
+      margin-right: 4px;
+    }
   }
   .ant-tabs-top > .ant-tabs-nav,
   .ant-tabs-bottom > .ant-tabs-nav,

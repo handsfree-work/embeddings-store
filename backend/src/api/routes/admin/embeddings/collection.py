@@ -3,7 +3,7 @@ from fastapi import Depends
 
 from src.api.dependencies.auth_checker import PermissionChecker
 from src.api.dependencies.repository import get_repository
-from src.modules.base.models.schemas.response import RestfulRes, PageQuery, PageRes
+from src.modules.base.models.schemas.response import RestfulRes, PageQuery, PageRes, ListRes
 from src.modules.embeddings.models.db.em_collection import EmCollectionEntity
 from src.modules.embeddings.repository.collection import CollectionRepository
 from src.repository.crud import SelectOptions
@@ -40,6 +40,20 @@ async def collection_get(
 ) -> RestfulRes[EmCollectionEntity]:
     collection = await repo.get(id=id)
     return RestfulRes.success(data=collection)
+
+
+@router.post(
+    path="/list",
+    name="embeddings:collection:list",
+    dependencies=[Depends(PermissionChecker(per="embeddings:collection:view"))],
+    response_model=RestfulRes[ListRes[EmCollectionEntity]],
+    status_code=fastapi.status.HTTP_200_OK,
+)
+async def collection_list(
+        repo: CollectionRepository = Depends(get_repository(repo_type=CollectionRepository)),
+) -> RestfulRes[ListRes[EmCollectionEntity]]:
+    collections = await repo.find()
+    return RestfulRes.success_list(data=collections)
 
 
 @router.post(

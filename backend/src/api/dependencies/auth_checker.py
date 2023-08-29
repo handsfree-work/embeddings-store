@@ -12,10 +12,10 @@ from src.securities.authorizations.jwt import jwt_generator
 from src.utilities.exceptions.biz.biz_common import server_error
 from src.utilities.exceptions.http.exc_401 import http_exc_401
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
 
 
-async def get_user_from_token(token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_user_from_token(token: Annotated[str, Depends(oauth2_schema)]):
     try:
         user = jwt_generator.retrieve_details_from_token(token)
         return user
@@ -43,7 +43,7 @@ class PermissionChecker:
 
     async def __call__(self,
                        request: Request,
-                       token: str = Depends(oauth2_scheme),
+                       token: str = Depends(oauth2_schema),
                        role_repo: RoleRepository = Depends(get_repository(repo_type=RoleRepository))
                        ) -> Optional[str]:
         request.state.user = None

@@ -118,9 +118,9 @@ function install(app: any, options: any = {}) {
           created_at: {
             title: "创建时间",
             type: "datetime",
-            order:1000,
             form: { show: false }, // 表单配置
             column: {
+              order:1000,
               width: 180,
               sorter: true
             }
@@ -128,9 +128,9 @@ function install(app: any, options: any = {}) {
           updated_at: {
             title: "修改时间",
             type: "datetime",
-            order:1000,
             form: { show: false }, // 表单配置
             column: {
+              order:1000,
               sortable: "update_time",
               width: 180
             }

@@ -1,88 +1,89 @@
-import openai
-from pgvector.sqlalchemy import Vector
-from sqlalchemy import Integer, Text, insert, select
+from sqlalchemy import select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import (
-    create_async_engine as create_sqlalchemy_async_engine, AsyncSession, async_sessionmaker, AsyncEngine,
-)
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.pool import QueuePool as SQLAlchemyQueuePool
+    AsyncSession, )
 
-from src.config.config import settings
-from src.modules.ai.service.openai_client import OpenAiClient
-from src.modules.embeddings.store.pgvector.table import Base
+from src.modules.ai.service.openai_client import OpenAiClient, model_registry
+from src.modules.base.models.schemas.response import PageQuery, PageRes
+from src.modules.embeddings.models.db.em_document import EmDocumentEntity
+from src.modules.embeddings.store.pgvector.document_repo import DocumentStoreRepository
+from src.modules.embeddings.store.pgvector.model import Document
+from src.modules.embeddings.store.pgvector.session import pgvector_db, transaction
 from src.modules.embeddings.store.store_factory import AbstractVectorStore
 from src.repository.crud import SessionWrapper
-from src.repository.session import transaction
-
-
-class Document(Base):
-    __tablename__ = 'document'
-
-    id = mapped_column(Integer, primary_key=True)
-    collection_id = mapped_column(Integer)
-    source_id = mapped_column(Integer)
-    source_index = mapped_column(Integer)
-    title = mapped_column(Text)
-    content = mapped_column(Text)
-    embedding = mapped_column(Vector(1536))
+from src.repository.schema import SelectOptions, OrderBy
 
 
 class PgvectorStore(AbstractVectorStore):
 
     def __init__(self):
-        async_db_uri = settings.vector_store.pg_uri
-        self.async_engine: AsyncEngine = create_sqlalchemy_async_engine(
-            url=async_db_uri,
-            echo=settings.base.is_db_echo_log,
-            pool_size=settings.base.db_pool_size,
-            max_overflow=settings.base.db_pool_overflow,
-            poolclass=SQLAlchemyQueuePool,
-        )
-        # with self.async_engine.connect() as conn:
-        #     conn.execute(text('CREATE EXTENSION IF NOT EXISTS vector'))
-        #     conn.commit()
-        self.async_session: AsyncSession = AsyncSession(bind=self.async_engine)
-        self.async_session_maker = async_sessionmaker(self.async_engine, class_=AsyncSession)
-
-        self.openai = OpenAiClient()
+        self.openai = OpenAiClient(model=model_registry.text_embedding_ada_002)
 
     def create_session(self):
-        return self.async_session_maker()
+        return pgvector_db.async_session_maker()
 
     async def init(self):
         # Base = declarative_base()
         # Base.metadata.create_all(self.async_engine)
         pass
 
-    async def store(self, documents: list):
-        input = [
-            'The dog is barking',
-            'The cat is purring',
-            'The bear is growling'
-        ]
+    def create_repo(self, session: AsyncSession):
+        return DocumentStoreRepository(session_wrapper=SessionWrapper(session=session))
 
-        embeddings = [v['embedding'] for v in
-                      openai.Embedding.create(input=input, model='text-embedding-ada-002')['data']]
-        documents = [dict(content=input[i], embedding=embedding) for i, embedding in enumerate(embeddings)]
+    async def page(self, page_query: PageQuery[EmDocumentEntity]) -> PageRes[EmDocumentEntity]:
 
-        async def task(session_wrapper: SessionWrapper = None):
-            session_ = session_wrapper.session
-            await session_.execute(insert(Document), documents)
+        async with transaction() as session:
+            repo = self.create_repo(session=session)
+            return await repo.page(page_query,
+                                   options=SelectOptions().with_order_by(OrderBy(name="id", desc=True)))
 
-        await transaction(self.create_session(), task)
+    async def create(self, document: EmDocumentEntity):
 
-    async def search(self, query: str, top_k: int = 10) -> list:
-        async def task(session_wrapper: SessionWrapper):
-            session_ = session_wrapper.session
-            doc = await session_.get(Document, 1)
-            neighbors = await session_.scalars(
-                select(Document).filter(Document.id != doc.id).order_by(
-                    Document.embedding.max_inner_product(doc.embedding)).limit(
-                    5))
-            res = list()
-            for neighbor in neighbors:
-                print(neighbor.content)
-                res.append(neighbor.content)
+        async with transaction() as session:
+            repo = self.create_repo(session=session)
+            await repo.create(document)
+
+    async def update(self, document: EmDocumentEntity):
+        async with transaction() as session:
+            repo = self.create_repo(session=session)
+            document.updated_at = None
+            document.created_at = None
+            await repo.update(document.id, document)
+
+    async def delete(self, id: int):
+        async with transaction() as session:
+            repo = self.create_repo(session=session)
+            await repo.delete(id)
+
+    async def delete_by_source_id(self, source_id: int):
+        async with transaction() as session:
+            repo = self.create_repo(session=session)
+            await repo.delete_where(options=SelectOptions().with_where(Document.source_id == source_id))
+
+    async def delete_by_collection_id(self, collection_id: int):
+        async with transaction() as session:
+            repo = self.create_repo(session=session)
+            await repo.delete_where(options=SelectOptions().with_where(Document.collection_id == collection_id))
+
+    async def search(self, query_embedding: list[float], top_k: int = 10, condition: EmDocumentEntity = None) -> list[
+        EmDocumentEntity]:
+        async with transaction() as session:
+            score_ = Document.embedding.l2_distance(query_embedding).label("score")
+            stmt = select(Document.id,
+                          Document.title,
+                          Document.content,
+                          score_)
+            if condition is not None:
+                for k, v in condition.__dict__.items():
+                    if v is not None:
+                        stmt = stmt.filter(getattr(Document, k) == v)
+            stmt = stmt.order_by(score_).limit(top_k)
+
+            q = await session.execute(statement=stmt)
+            rows = q.all()
+            print(rows)
+            res: list[EmDocumentEntity] = list()
+            for row in rows:
+                entity = EmDocumentEntity(id=row[0], title=row[1], content=row[2], score=row[3])
+                res.append(entity)
             return res
-
-        return await transaction(self.create_session(), task)

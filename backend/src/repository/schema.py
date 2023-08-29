@@ -23,11 +23,6 @@ class SelectOptions:
         self.query = query
         return self
 
-    def clear_load(self):
-        self.selectinload.clear()
-        self.joinedload.clear()
-        return self
-
     def with_selectinload(self, column_opts: any):
         self.selectinload.append(column_opts)
         return self
@@ -61,4 +56,14 @@ class SelectOptions:
             for item in self.joinedload:
                 if item.key == key:
                     return True
+        pass
+
+    def clear_load(self):
+        self.selectinload.clear()
+        self.joinedload.clear()
+        return self
+
+    def clear_by_count(self):
+        self.clear_load()
+        self.order_by.clear()
         pass

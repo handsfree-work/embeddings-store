@@ -128,7 +128,7 @@ class BaseCRUDRepository(BaseRepository, Generic[T, E]):
             entities.append(item.to_entity(options))
 
         # 查询total
-        options.clear_load()
+        options.clear_by_count()
         stmt = sqlalchemy.select(func.count()).select_from(self.model)
         if page_query.query:
             stmt = self._where_by_entity(stmt, page_query.query)

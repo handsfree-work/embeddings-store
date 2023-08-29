@@ -3,9 +3,13 @@ from typing import Optional
 
 import loguru
 import openai
+from openai import InvalidRequestError
 
 from src.config.config import settings
 from src.modules.base.models.schemas.base import BaseSchemaModel, BaseAnyModel
+from src.utilities.exceptions.biz.biz_common import client_error
+
+openai.Embedding
 
 
 class ChatMessage(BaseSchemaModel):
@@ -19,6 +23,10 @@ class ChatRequest(BaseSchemaModel):
     messages: list[ChatMessage]
     functions: list[dict] | None = None
     temperature: float | None = None
+
+
+class EmbeddingRequest(BaseSchemaModel):
+    input: str
 
 
 class OpenAiModel(BaseSchemaModel):
@@ -37,24 +45,34 @@ class OpenAiModel(BaseSchemaModel):
 models: dict[str, OpenAiModel] = {}
 
 
-def append_model(model: OpenAiModel):
-    models[model.name] = model
+class ModelRegistry(BaseAnyModel):
+    gpt_35_turbo: OpenAiModel = OpenAiModel(name="gpt-3.5-turbo", max_tokens=4096, max_reply_tokens=1024)
+    gpt_35_turbo_0613: OpenAiModel = OpenAiModel(name="gpt-3.5-turbo-0613", max_tokens=4096, max_reply_tokens=1024)
+    gpt_35_turbo_32k: OpenAiModel = OpenAiModel(name="gpt-3.5-turbo-32k", max_tokens=32768, max_reply_tokens=2048)
+    gpt_35_turbo_16k: OpenAiModel = OpenAiModel(name="gpt-3.5-turbo-16k", max_tokens=16384, max_reply_tokens=2048)
+    text_embedding_ada_002: OpenAiModel = OpenAiModel(name="text-embedding-ada-002", max_tokens=32768,
+                                                      max_reply_tokens=2048)
+
+    def get(self, name: str):
+        for k, v in self.__dict__.items():
+            if v.name == name:
+                return v
 
 
-append_model(OpenAiModel(name="gpt-3.5-turbo", max_tokens=4096, max_reply_tokens=1024))
-append_model(OpenAiModel(name="gpt-3.5-turbo-0613", max_tokens=4096, max_reply_tokens=1024))
-append_model(OpenAiModel(name="gpt-3.5-turbo-32k", max_tokens=32768, max_reply_tokens=2048))
+model_registry = ModelRegistry()
 
 import tiktoken
 
 
 class OpenAiClient:
-    def __init__(self, model: str = "gpt-3.5-turbo", retain_tokens: int = 0, max_reply_tokens: int = None):
+    def __init__(self, model: str | OpenAiModel = "gpt-3.5-turbo", retain_tokens: int = 0,
+                 max_reply_tokens: int = None):
         openai.api_key = settings.openai.api_key
         openai.api_base = settings.openai.api_base
         openai.api_version = settings.openai.api_version
         openai.api_type = settings.openai.api_type
-        model = models[model]
+        if isinstance(model, str):
+            model = model_registry.get(model)
         self.model_name = model.name
         self.max_tokens = model.max_tokens
         self.retain_tokens = retain_tokens
@@ -68,11 +86,23 @@ class OpenAiClient:
         for message in req.messages:
             messages.append(message.model_dump(exclude_none=True, exclude_unset=True))
         loguru.logger.debug("chat_send,engine:{},messages:{}", engine, messages)
-        chat_completion = openai.ChatCompletion.create(messages=messages, functions=req.functions,
-                                                       function_call="auto", engine=self.engine,
-                                                       temperature=req.temperature)
-        loguru.logger.debug("chat_send,response:{}", chat_completion)
-        return chat_completion.choices[0].message
+        try:
+            chat_completion = openai.ChatCompletion.create(messages=messages, functions=req.functions,
+                                                           function_call="auto", engine=self.engine,
+                                                           temperature=req.temperature)
+            loguru.logger.debug("chat_send,response:{}", chat_completion)
+            return chat_completion.choices[0].message
+        except InvalidRequestError as e:
+            loguru.logger.error("chat_send error:{}", e)
+            raise client_error(message=e.user_message)
+
+    def embedding(self, req: EmbeddingRequest):
+        try:
+            res = openai.Embedding.create(input=req.input, model=self.model_name)
+            return res['data'][0]['embedding']
+        except InvalidRequestError as e:
+            loguru.logger.error("embedding error:{}", e)
+            raise client_error(message=e.user_message)
 
     def build_chat_messages(self, system_message: ChatMessage, chat_history: list[ChatMessage]):
         """

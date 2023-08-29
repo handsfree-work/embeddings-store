@@ -139,7 +139,10 @@ export const usePageStore = defineStore({
           return page.fullPath === fullPath;
         })
       }
-      current.meta!.title = title
+      if(current && current.meta){
+        current.meta!.title = title
+      }
+
     },
     /**
      * @class opened
@@ -179,7 +182,7 @@ export const usePageStore = defineStore({
      */
     async add({ tag, params, query, fullPath }: any) {
       // 设置新的 tag 在新打开一个以前没打开过的页面时使用
-      const newTag = tag;
+      const newTag = cloneDeep(tag);
       newTag.params = params || newTag.params;
       newTag.query = query || newTag.query;
       newTag.fullPath = fullPath || newTag.fullPath;

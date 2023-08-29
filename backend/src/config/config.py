@@ -10,7 +10,7 @@ class BasicSettings(BaseSettings, case_sensitive=True):
     model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='basic_')
 
     environment: str = "dev"
-    title: str = "powerleader gpt customer service backend"
+    title: str = "embeddings store service"
     version: str = "0.1.0"
     timezone: str = "UTC"
     description: str | None = None
@@ -58,8 +58,6 @@ class BasicSettings(BaseSettings, case_sensitive=True):
         "http://0.0.0.0:5173",
         "http://127.0.0.1:5173",  # qwik docker port
         "http://127.0.0.1:5174",
-        "https://cs.powerleader.chat",
-        "https://cs-test.powerleader.chat",
     ]
     allowed_methods: list[str] = ["*"]
     allowed_headers: list[str] = ["*"]

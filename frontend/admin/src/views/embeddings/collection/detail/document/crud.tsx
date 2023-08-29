@@ -1,7 +1,7 @@
 import * as api from "./api";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, dict, EditReq, UserPageQuery, UserPageRes } from "@fast-crud/fast-crud";
 
-export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOptionsRet {
+export default function ({ crudExpose, context }: CreateCrudOptionsProps): CreateCrudOptionsRet {
   const pageRequest = async (query: UserPageQuery): Promise<UserPageRes> => {
     return await api.GetList(query);
   };
@@ -17,6 +17,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
     return await api.AddObj(form);
   };
 
+  const { props } = context;
   return {
     crudOptions: {
       request: {
@@ -34,8 +35,18 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
           x: 1400
         }
       },
-      toolbar:{
-        compact:false
+      toolbar: {
+        compact: false
+      },
+      search: {
+        initialForm: {
+          collection_id: props.id
+        }
+      },
+      form: {
+        initialForm: {
+          collection_id: props.id
+        }
       },
       columns: {
         id: {
@@ -47,64 +58,72 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
             sorter: true
           }
         },
-        key: {
-          title: "集合Key",
-          type: "text",
-          search: { show: true }, // 开启查询
-          form: {
-            rules: [
-              { required: true, message: "请输入集合Key" },
-              { max: 50, message: "最大50个字符" }
-            ]
-          },
-          editForm: { component: { disabled: true } },
-          column: {
-            sorter: true
-          }
-        },
         title: {
-          title: "集合名称",
-          type: "text",
+          title: "标题",
+          type: "textarea",
           search: { show: true }, // 开启查询
           form: {
-            rules: [
-              { required: true, message: "请输入集合名称" },
-              { max: 50, message: "最大50个字符" }
-            ]
+            col: {
+              span: 24
+            },
+            component: {
+              placeholder: "问题",
+              autoSize: { minRows: 3, maxRows: 6 }
+            }
           },
           editForm: { component: { disabled: true } },
           column: {
             sorter: true
           }
         },
-        remark: {
-          title: "备注",
-          type: "text",
-          column: {
-            sorter: true
-          },
+        content: {
+          title: "内容",
+          type: "textarea",
+          search: { show: true }, // 开启查询
           form: {
-            rules: [{ max: 100, message: "最大100个字符" }]
-          }
-        },
-        created_at: {
-          title: "创建时间",
-          type: "datetime",
-          form: { show: false }, // 表单配置
+            col: {
+              span: 24
+            },
+            component: {
+              placeholder: "答案",
+              autoSize: { minRows: 4, maxRows: 8 }
+            },
+            helper: "以【title \\n content】格式拼接后计算向量数据"
+          },
+          editForm: { component: { disabled: true } },
           column: {
-            width: 180,
             sorter: true
           }
         },
-        updated_at: {
-          title: "修改时间",
-          type: "datetime",
-          form: { show: false }, // 表单配置
+        collection_id: {
+          title: "集合",
+          type: "dict-select",
+          dict: dict({
+            url: "/admin/embeddings/collection/list",
+            label: "title",
+            value: "id"
+          }),
+          form: {
+            show: false
+          },
           column: {
-            sortable: "update_time",
-            width: 180
+            sorter: true
           }
-        },
+        }
+        // source_id: {
+        //   title: "数据源",
+        //   type: "dict-select",
+        //   column: {
+        //     sorter: true
+        //   },
+        // },
+        // source_index: {
+        //   title: "源内序号",
+        //   type: "number",
+        //   column: {
+        //     sorter: true
+        //   },
+        // },
       }
     }
   };

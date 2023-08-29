@@ -1,5 +1,8 @@
-from src.config.config import settings
+from typing import List
 
+from src.config.config import settings
+from src.modules.base.models.schemas.response import PageQuery, PageRes
+from src.modules.embeddings.models.db.em_document import EmDocumentEntity
 
 class AbstractVectorStore:
 
@@ -9,7 +12,10 @@ class AbstractVectorStore:
     async def store(self, documents: list):
         raise NotImplementedError()
 
-    async def search(self, query: str, top_k: int = 10) -> list:
+    async def search(self, query: List[float], top_k: int = 10, condition: EmDocumentEntity = None) -> list:
+        raise NotImplementedError()
+
+    async def page(self, page_query: PageQuery[EmDocumentEntity]) -> PageRes[EmDocumentEntity]:
         raise NotImplementedError()
 
 

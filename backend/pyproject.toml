@@ -1,5 +1,5 @@
 [project]
-name = "Powerleader AI Customer Service"
+name = "embeddings store service"
 version = "0.0.1"
 description = "A comprehensive template to start a real-world quality project."
 authors = [

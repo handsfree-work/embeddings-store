@@ -1,5 +1,5 @@
 from src.securities.hashing.hash import hash_generator
-from src.utilities.strings.strings import generate_random_number_string
+from src.utilities.strings.strings import random_number_string
 import loguru
 
 
@@ -15,7 +15,7 @@ class PasswordGenerator:
         return hash_generator.is_password_verified(password=hash_salt + password, hashed_password=hashed_password)
 
     def random_password(self):
-        password = generate_random_number_string(6)
+        password = random_number_string(6)
         salt = self.generate_salt
         loguru.logger.info("随机密码,你可以根据此日志重置管理员密码:password={}，hashed_password={}，salt={}",
                            password,

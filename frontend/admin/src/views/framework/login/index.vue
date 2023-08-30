@@ -55,7 +55,7 @@
                 </a-input>
               </a-col>
               <a-col class="gutter-row" :span="8">
-                <a-button class="getCaptcha" tabindex="-1" :disabled="smsSendBtnDisabled" @click="sendSmsCode">{{ smsTime <= 0 ? "发送" : smsTime + " s" qs}}</a-button>
+                <a-button class="getCaptcha" tabindex="-1" :disabled="smsSendBtnDisabled" @click="sendSmsCode">{{ smsTime <= 0 ? "发送" : smsTime + " s" }}</a-button>
               </a-col>
             </a-row>
           </a-form-item>

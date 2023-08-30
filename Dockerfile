@@ -37,7 +37,7 @@ RUN pip3 install -r requirements.txt
 # Copy all files
 COPY ./backend/ .
 # Copy entrypoint.sh for auto connection with account_db service
-COPY ./entrypoint.sh .
+#COPY ./backend/entrypoint.sh .
 RUN chmod +x /usr/backend/entrypoint.sh
 
 

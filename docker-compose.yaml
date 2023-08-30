@@ -13,7 +13,7 @@ services:
     container_name: em-api # 容器名
     restart: unless-stopped # 重启
     ports: # 端口映射
-      - "8006:8000"
+      - "8006:8006"
     environment:
       - TZ=Asia/Shanghai
       - ENVIRONMENT=dev

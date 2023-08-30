@@ -1,4 +1,4 @@
-FROM node:18 AS admin_client
+FROM registry.cn-shenzhen.aliyuncs.com/handsfree/node:18 AS admin_client
 WORKDIR /work
 ADD ./frontend/admin/package.json ./package.json
 RUN npm install -g pnpm && npm run build
@@ -7,7 +7,7 @@ ADD ./frontend/admin/ .
 RUN npm run build:production
 
 # Pull official latest Python Docker image (Pulished with version 3.11.0)
-FROM --platform=linux/amd64 python:3.10
+FROM --platform=linux/amd64 registry.cn-shenzhen.aliyuncs.com/handsfree/python:3.10
 
 # Set the working directory
 WORKDIR /usr/backend

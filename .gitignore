@@ -161,3 +161,4 @@ node_modules/
 .yarn/*
 !.yarn/releases
 !/backend/.env
+!/docker/build/

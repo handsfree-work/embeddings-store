@@ -31,7 +31,7 @@ EXPOSE 8006
 #ENV HTTPS_PROXY=http://192.168.34.139:10811
 # Install Python dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt ./
+COPY ./backend/requirements.txt ./
 RUN pip3 install -r requirements.txt
 
 # Copy all files

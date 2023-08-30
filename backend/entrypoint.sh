@@ -16,4 +16,6 @@
 
 alembic upgrade head
 
+alembic -c "alembic-pgvector.ini" upgrade head
+
 exec "$@"

@@ -17,7 +17,7 @@ class BasicSettings(BaseSettings, case_sensitive=True):
     debug: bool = False
 
     server_host: str = ""  # type: ignore
-    server_port: int = 8000  # type: ignore
+    server_port: int = 8006  # type: ignore
     server_workers: int = 4
     api_prefix: str = "/api"
     docs_url: str = "/docs"

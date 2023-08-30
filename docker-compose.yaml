@@ -1,55 +1,21 @@
 version: '3.9'
 
 services:
-  db:
-    image: postgres:14
-    container_name: db
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USERNAME}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - PGDATA=/var/lib/postgresql/data/
-    volumes:
-      - postgresql_db_data:/var/lib/postgresql/data/
-    expose:
-      - 5432
-    ports:
-      - 5433:5432
-
-  db_editor:
-    image: adminer
-    container_name: db_editor
-    restart: always
-    environment:
-      - POSTGRES_USER=${POSTGRES_USERNAME}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-    expose:
-      - 8080
-    ports:
-      - 8081:8080
-    depends_on:
-      - db
-
-  backend_app:
-    container_name: backend_app
-    restart: always
+  embeddings-store:
     build:
-      dockerfile: Dockerfile
-      context: ./backend/
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        HTTPS_PROXY: http://192.168.34.139:10811
+        HTTP_PROXY: http://192.168.34.139:10811
+        NO_PROXY: 192.168.*,localhost,127.0.0.*
+    image: harbor.baode.docmirror.cn/dev/em-store
+    container_name: em-api # 容器名
+    restart: unless-stopped # 重启
+    ports: # 端口映射
+      - "8006:8000"
     environment:
-      - ENVIRONMENT=${ENVIRONMENT}
-    volumes:
-      - ./backend/:/usr/backend/
-    expose:
-      - 8000
-    ports:
-      - 8001:8000
-    depends_on:
-      - db
-
-volumes:
-  postgresql_db_data:
+      - TZ=Asia/Shanghai
+      - ENVIRONMENT=dev
+      - basic_jwt_secret_key=changeit
+      - basic_jwt_subject=changeit

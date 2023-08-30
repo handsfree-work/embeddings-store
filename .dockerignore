@@ -19,3 +19,6 @@ requirements-prod.txt
 CONTAINER.md
 README.md
 node_modules/
+*/node_modules/
+backend/venv/
+*/.idea

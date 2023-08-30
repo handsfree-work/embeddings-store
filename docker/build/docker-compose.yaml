@@ -1,22 +1,7 @@
 version: '3.9'
 
 services:
-  pgvector:
-    image: ankane/pgvector:v0.4.4 # git
-    # image: registry.cn-hangzhou.aliyuncs.com/fastgpt/pgvector:v0.4.2 # 阿里云
-    container_name: pgvector
-    restart: always
-    ports: # 生产环境建议不要暴露
-      - 5433:5432
-    environment:
-      # 这里的配置只有首次运行生效。修改后，重启镜像是不会生效的。需要把持久化数据删除再重启，才有效果
-      - POSTGRES_USER=handsfree
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=embeddings-store
-    volumes:
-      - ./data/pgvector:/var/lib/postgresql/data
-
-  api:
+  em-store:
     build:
       context: ../../backend/
       dockerfile: ./Dockerfile
@@ -24,7 +9,7 @@ services:
         HTTPS_PROXY: http://192.168.34.139:10811
         HTTP_PROXY: http://192.168.34.139:10811
         NO_PROXY: 192.168.*,localhost,127.0.0.*
-    image: harbor.baode.docmirror.cn/dev/em-api
+    image: harbor.baode.docmirror.cn/dev/em-store
     container_name: em-api # 容器名
     restart: unless-stopped # 重启
     ports: # 端口映射

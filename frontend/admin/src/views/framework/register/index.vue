@@ -43,7 +43,8 @@ export default defineComponent({
     const formRef = ref();
     const formState: any = reactive({
       username: "",
-      password: ""
+      password: "",
+      user_type: 1
     });
 
     const rules = {
@@ -80,10 +81,11 @@ export default defineComponent({
 
     const handleFinish = async (values: any) => {
       console.log(values, formState);
-      const userInfo = await userStore.login(
+      await userStore.login(
         toRaw({
           password: formState.password,
-          username: formState.username
+          username: formState.username,
+          user_type: 1
         })
       );
     };

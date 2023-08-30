@@ -55,7 +55,7 @@
                 </a-input>
               </a-col>
               <a-col class="gutter-row" :span="8">
-                <a-button class="getCaptcha" tabindex="-1" :disabled="smsSendBtnDisabled" @click="sendSmsCode" v-text="smsTime <= 0 ? '发送' : smsTime + ' s'"></a-button>
+                <a-button class="getCaptcha" tabindex="-1" :disabled="smsSendBtnDisabled" @click="sendSmsCode">{{ smsTime <= 0 ? "发送" : smsTime + " s" qs}}</a-button>
               </a-col>
             </a-row>
           </a-form-item>
@@ -86,7 +86,8 @@ export default defineComponent({
       password: "123456",
       loginType: "password", //password
       imgCode: "",
-      smsCode: ""
+      smsCode: "",
+      user_type: 1
     });
 
     const rules = {
@@ -132,7 +133,7 @@ export default defineComponent({
       console.log(values, formState);
       loading.value = true;
       try {
-        const userInfo = await userStore.login(toRaw(formState));
+        await userStore.login(toRaw(formState));
       } finally {
         loading.value = false;
       }

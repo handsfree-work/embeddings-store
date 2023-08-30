@@ -1,11 +1,11 @@
-FROM registry.cn-shenzhen.aliyuncs.com/handsfree/node:18 AS admin_client
-WORKDIR /work
-ADD ./frontend/admin/package.json ./package.json
-RUN npm install -g pnpm
-RUN pnpm install
-
-ADD ./frontend/admin/ .
-RUN npm run build
+#FROM registry.cn-shenzhen.aliyuncs.com/handsfree/node:18 AS admin_client
+#WORKDIR /work
+#ADD ./frontend/admin/package.json ./package.json
+#RUN npm install -g pnpm
+#RUN pnpm install
+#
+#ADD ./frontend/admin/ .
+#RUN npm run build
 
 # Pull official latest Python Docker image (Pulished with version 3.11.0)
 FROM --platform=linux/amd64 registry.cn-shenzhen.aliyuncs.com/handsfree/python:3.10
@@ -43,8 +43,8 @@ RUN chmod +x /usr/backend/entrypoint.sh
 
 
 # 将编译好的前端文件复制到public文件夹下
-COPY --from=admin_client ./dist/ ./public/
-
+#COPY --from=admin_client ./dist/ ./public/
+ADD ./frontend/admin/dist/ ./public/
 # Execute entrypoint.sh
 ENTRYPOINT ["/usr/backend/entrypoint.sh" ]
 

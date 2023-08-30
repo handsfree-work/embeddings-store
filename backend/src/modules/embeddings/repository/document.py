@@ -14,7 +14,7 @@ class DocumentRepository():
         pass
 
     async def create(self, document: EmDocumentEntity):
-        embedding = self.openai.embedding(req=EmbeddingRequest(input=document.get_embedding_content()))
+        embedding = await self.openai.embedding(req=EmbeddingRequest(input=document.get_embedding_content()))
         document.embedding = embedding
 
         store = await vector_store_factory.get_vector_store()
@@ -23,13 +23,13 @@ class DocumentRepository():
 
     async def search(self, query: str, top_k: int = 10, condition: EmDocumentEntity = None) -> list[EmDocumentEntity]:
         store = await vector_store_factory.get_vector_store()
-        query_embedding = self.openai.embedding(req=EmbeddingRequest(input=query))
+        query_embedding = await self.openai.embedding(req=EmbeddingRequest(input=query))
 
         return await store.search(query_embedding, top_k, condition)
         pass
 
     async def update(self, document: EmDocumentEntity):
-        embedding = self.openai.embedding(req=EmbeddingRequest(input=document.get_embedding_content()))
+        embedding = await self.openai.embedding(req=EmbeddingRequest(input=document.get_embedding_content()))
         document.embedding = embedding
         store = await vector_store_factory.get_vector_store()
         return await store.update(document)

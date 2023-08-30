@@ -1,9 +1,7 @@
 from sqlalchemy import select
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import (
     AsyncSession, )
 
-from src.modules.ai.service.openai_client import OpenAiClient, model_registry
 from src.modules.base.models.schemas.response import PageQuery, PageRes
 from src.modules.embeddings.models.db.em_document import EmDocumentEntity
 from src.modules.embeddings.store.pgvector.document_repo import DocumentStoreRepository
@@ -15,9 +13,9 @@ from src.repository.schema import SelectOptions, OrderBy
 
 
 class PgvectorStore(AbstractVectorStore):
-
     def __init__(self):
-        self.openai = OpenAiClient(model=model_registry.text_embedding_ada_002)
+        # 禁止非异步的东西
+        pass
 
     def create_session(self):
         return pgvector_db.async_session_maker()

@@ -6,7 +6,6 @@ from sqlalchemy import engine_from_config
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.pool import NullPool as SQLAlchemyNullPool
-import src.repository.base
 from src.config.manager import settings
 from src.repository.base import Base
 from src.repository.database import async_db

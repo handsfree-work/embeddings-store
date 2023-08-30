@@ -1,9 +1,9 @@
 import fastapi
+from anyio._backends._asyncio import sleep
 from fastapi import Depends
 
 from src.api.dependencies.auth_checker import PermissionChecker
 from src.api.dependencies.repository import get_repository
-from src.modules.account.models.db.user import User
 from src.modules.account.models.db.user_role import UserRole
 from src.modules.account.models.schemas.user import UserEntity, UserInCreate
 from src.modules.account.repository.user import UserRepository

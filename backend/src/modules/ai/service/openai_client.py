@@ -1,4 +1,3 @@
-import json
 from typing import Optional
 
 import loguru
@@ -8,8 +7,6 @@ from openai import InvalidRequestError
 from src.config.config import settings
 from src.modules.base.models.schemas.base import BaseSchemaModel, BaseAnyModel
 from src.utilities.exceptions.biz.biz_common import client_error
-
-openai.Embedding
 
 
 class ChatMessage(BaseSchemaModel):
@@ -79,7 +76,7 @@ class OpenAiClient:
         self.max_reply_tokens = max_reply_tokens if max_reply_tokens is not None else model.max_reply_tokens
         self.engine = model.get_engine()
 
-    def chat_send(self, req: ChatRequest):
+    async def chat_send(self, req: ChatRequest):
         # create a chat completion
         engine = self.engine
         messages = list()
@@ -87,18 +84,18 @@ class OpenAiClient:
             messages.append(message.model_dump(exclude_none=True, exclude_unset=True))
         loguru.logger.debug("chat_send,engine:{},messages:{}", engine, messages)
         try:
-            chat_completion = openai.ChatCompletion.create(messages=messages, functions=req.functions,
-                                                           function_call="auto", engine=self.engine,
-                                                           temperature=req.temperature)
+            chat_completion = await openai.ChatCompletion.acreate(messages=messages, functions=req.functions,
+                                                                  function_call="auto", engine=self.engine,
+                                                                  temperature=req.temperature, timeout=120)
             loguru.logger.debug("chat_send,response:{}", chat_completion)
             return chat_completion.choices[0].message
         except InvalidRequestError as e:
             loguru.logger.error("chat_send error:{}", e)
             raise client_error(message=e.user_message)
 
-    def embedding(self, req: EmbeddingRequest):
+    async def embedding(self, req: EmbeddingRequest):
         try:
-            res = openai.Embedding.create(input=req.input, model=self.model_name)
+            res = await openai.Embedding.acreate(input=[req.input], model=self.model_name, timeout=30)
             return res['data'][0]['embedding']
         except InvalidRequestError as e:
             loguru.logger.error("embedding error:{}", e)

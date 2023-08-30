@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: ../../backend/
+      dockerfile: ./Dockerfile
+      args:
+        HTTPS_PROXY: http://192.168.34.139:10811
+        HTTP_PROXY: http://192.168.34.139:10811
+        NO_PROXY: 192.168.*,localhost,127.0.0.*
+    image: harbor.baode.docmirror.cn/dev/em-api
+    container_name: em-api # 容器名
+    restart: unless-stopped # 重启
+    ports: # 端口映射
+      - "8006:8000"
+    environment:
+      - TZ=Asia/Shanghai
+      - ENVIRONMENT=dev
+      - basic_jwt_secret_key=changeit
+      - basic_jwt_subject=changeit

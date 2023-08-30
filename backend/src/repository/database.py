@@ -1,3 +1,4 @@
+import loguru
 import pydantic
 from sqlalchemy.ext.asyncio import (
     create_async_engine as create_sqlalchemy_async_engine, AsyncSession, async_sessionmaker, AsyncEngine,
@@ -13,6 +14,7 @@ class AsyncDatabase:
         #     url=f"{settings.DB_POSTGRES_SCHEMA}://{settings.DB_POSTGRES_USENRAME}:{settings.DB_POSTGRES_PASSWORD}@{settings.DB_POSTGRES_HOST}:{settings.DB_POSTGRES_PORT}/{settings.DB_POSTGRES_NAME}",
         # )
         self.postgres_uri = f"{settings.db_postgres_schema}://{settings.db_postgres_username}:{settings.db_postgres_password}@{settings.db_postgres_host}:{settings.db_postgres_port}/{settings.db_postgres_db}"
+        loguru.logger.info("postgres_uri:{}", self.postgres_uri)
         self.async_engine: AsyncEngine = create_sqlalchemy_async_engine(
             url=self.set_async_db_uri,
             echo=settings.is_db_echo_log,

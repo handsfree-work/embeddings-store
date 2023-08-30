@@ -1,7 +1,9 @@
 FROM registry.cn-shenzhen.aliyuncs.com/handsfree/node:18 AS admin_client
 WORKDIR /work
 ADD ./frontend/admin/package.json ./package.json
-RUN npm install -g pnpm && npm run build
+RUN npm install -g pnpm
+RUN pnpm install
+RUN npm run build
 
 ADD ./frontend/admin/ .
 RUN npm run build:production

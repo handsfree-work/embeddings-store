@@ -50,4 +50,4 @@ ENTRYPOINT ["/usr/backend/entrypoint.sh" ]
 
 # Start up the backend server
 #CMD uvicorn src.main:backend_app --reload --workers 4 --host 0.0.0.0 --port 8006
-CMD python3 ./src/main.py
+CMD python3 ./start.py

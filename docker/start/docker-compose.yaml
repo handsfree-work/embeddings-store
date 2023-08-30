@@ -12,24 +12,26 @@ services:
       # 这里的配置只有首次运行生效。修改后，重启镜像是不会生效的。需要把持久化数据删除再重启，才有效果
       - POSTGRES_USER=handsfree
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=embeddings-store
+      - POSTGRES_DB=embeddings_store
     volumes:
       - ./data/pgvector:/var/lib/postgresql/data
   em-store:
-    build:
-      context: ../../backend/
-      dockerfile: ./Dockerfile
-      args:
-        HTTPS_PROXY: http://192.168.34.139:10811
-        HTTP_PROXY: http://192.168.34.139:10811
-        NO_PROXY: 192.168.*,localhost,127.0.0.*
-    image: harbor.baode.docmirror.cn/dev/em-api
-    container_name: em-api # 容器名
+    image: registry.cn-shenzhen.aliyuncs.com/handsfree/embeddings-store:latest
+    container_name: em-store # 容器名
     restart: unless-stopped # 重启
     ports: # 端口映射
-      - "8006:8000"
+      - "8006:8006"
     environment:
       - TZ=Asia/Shanghai
       - ENVIRONMENT=dev
       - basic_jwt_secret_key=changeit
       - basic_jwt_subject=changeit
+      - basic_db_postgres_db=embeddings_store
+      - basic_db_postgres_password=123456
+      - basic_db_postgres_port=5433
+      - basic_db_postgres_username=handsfree
+      - basic_db_postgres_host=192.168.43.240
+      - vs_pg_uri=postgresql+asyncpg://handsfree:123456@192.168.43.240:5433/embeddings_store
+      - basic_server_workers=4
+      - openai_api_key=sk-xxxx
+      - openai_api_base=https://api.openai.com/v1/

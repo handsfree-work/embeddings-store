@@ -3,7 +3,6 @@ WORKDIR /work
 ADD ./frontend/admin/package.json ./package.json
 RUN npm install -g pnpm
 RUN pnpm install
-RUN npm run build
 
 ADD ./frontend/admin/ .
 RUN npm run build:production

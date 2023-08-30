@@ -5,7 +5,7 @@ RUN npm install -g pnpm
 RUN pnpm install
 
 ADD ./frontend/admin/ .
-RUN npm run build:production
+RUN npm run build
 
 # Pull official latest Python Docker image (Pulished with version 3.11.0)
 FROM --platform=linux/amd64 registry.cn-shenzhen.aliyuncs.com/handsfree/python:3.10

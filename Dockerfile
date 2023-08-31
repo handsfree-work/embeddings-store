@@ -21,7 +21,6 @@ ENV VIRTUAL_ENV=/opt/venv
 # Switch on virtual environment
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
 # Set the server port
 EXPOSE 8006
 
@@ -48,6 +47,8 @@ ADD ./frontend/admin/dist/ ./public/
 # Execute entrypoint.sh
 ENTRYPOINT ["/usr/backend/entrypoint.sh" ]
 
+ENV basic_server_host 0.0.0.0
+ENV basic_server_port 8006
+ENV basic_server_works 4
 # Start up the backend server
-#CMD uvicorn src.main:backend_app --reload --workers 4 --host 0.0.0.0 --port 8006
-CMD python3 ./start.py
+CMD uvicorn src.main:backend_app --host $basic_server_host --port $basic_server_port --works $basic_server_works

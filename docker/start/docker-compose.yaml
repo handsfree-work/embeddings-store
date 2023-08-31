@@ -32,6 +32,6 @@ services:
       - basic_db_postgres_username=handsfree
       - basic_db_postgres_host=192.168.43.240
       - vs_pg_uri=postgresql+asyncpg://handsfree:123456@192.168.43.240:5433/embeddings_store
-      - basic_server_workers=4
+      - basic_server_workers=1
       - openai_api_key=sk-xxxx
       - openai_api_base=https://api.openai.com/v1/

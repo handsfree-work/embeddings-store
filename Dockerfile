@@ -51,4 +51,4 @@ ENV basic_server_host 0.0.0.0
 ENV basic_server_port 8006
 ENV basic_server_works 4
 # Start up the backend server
-CMD uvicorn src.main:backend_app --host $basic_server_host --port $basic_server_port --works $basic_server_works
+CMD uvicorn src.main:backend_app --host $basic_server_host --port $basic_server_port

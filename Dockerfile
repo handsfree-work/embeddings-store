@@ -32,7 +32,7 @@ EXPOSE 8006
 # Install Python dependencies
 RUN pip install --upgrade pip
 COPY ./backend/requirements.txt ./
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/
 
 # Copy all files
 COPY ./backend/ .

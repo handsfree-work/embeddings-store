@@ -32,7 +32,8 @@ EXPOSE 8006
 # Install Python dependencies
 RUN pip install --upgrade pip
 COPY ./backend/requirements.txt ./
-RUN pip3 install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && pip config set install.trusted-host mirrors.aliyun.com
+RUN pip3 install -r requirements.txt
 
 # Copy all files
 COPY ./backend/ .

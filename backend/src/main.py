@@ -11,8 +11,6 @@ from fastapi.staticfiles import StaticFiles
 def initialize_backend_application() -> fastapi.FastAPI:
     app = fastapi.FastAPI(**settings.set_backend_app_attributes)  # type: ignore
 
-    app.mount("/", StaticFiles(directory="public", html=True), name="public")
-
     app.add_event_handler(
         "startup",
         execute_backend_server_event_handler(backend_app=app),
@@ -25,6 +23,8 @@ def initialize_backend_application() -> fastapi.FastAPI:
     on_start(app)
 
     app.include_router(router=api_endpoint_router, prefix=settings.api_prefix)
+
+    app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
     return app
 

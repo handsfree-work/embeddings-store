@@ -6,9 +6,9 @@
         <div class="top flex flex-col items-center justify-center">
           <div class="header flex flex-row items-center">
             <img src="/images/logo/rect-black.svg" class="logo" alt="logo" />
-            <span class="title">FsAdmin</span>
+            <span class="title">宝德AI客服系统</span>
           </div>
-          <div class="desc">fast-crud，开发crud快如闪电</div>
+          <div class="desc">GPT智慧客服</div>
         </div>
 
         <router-view />
@@ -19,7 +19,7 @@
             <a href="_self">隐私</a>
             <a href="_self">条款</a>
           </div>
-          <div class="copyright">Copyright &copy; 2021 Greper</div>
+          <div class="copyright">Copyright &copy; 2022 Powerleader</div>
         </div>
       </div>
     </div>

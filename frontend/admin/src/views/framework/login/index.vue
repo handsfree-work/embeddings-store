@@ -81,9 +81,9 @@ export default defineComponent({
     const userStore = useUserStore();
     const formRef = ref();
     const formState = reactive({
-      username: "admin",
+      username: "",
       mobile: "",
-      password: "123456",
+      password: "",
       loginType: "password", //password
       imgCode: "",
       smsCode: "",

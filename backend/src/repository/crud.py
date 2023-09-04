@@ -1,14 +1,11 @@
-from typing import Generic, TypeVar
-
 import typing
+from typing import Generic, TypeVar
 
 import loguru
 import sqlalchemy
-from pydantic import BaseModel
 from sqlalchemy import func, column
 from sqlalchemy.ext.asyncio import AsyncSession as SQLAlchemyAsyncSession
 from sqlalchemy.orm import InstrumentedAttribute, selectinload, joinedload
-from sqlalchemy.sql import functions
 
 from src.modules.base.models.schemas.response import PageRes, PageQuery
 from src.repository.schema import SelectOptions

@@ -90,11 +90,11 @@ async def source_delete(
 
 
 @router.post(path="/upload",
-             name="embeddings:source:view",
-             dependencies=[Depends(PermissionChecker(per="account:source:view"))],
+             name="embeddings:source:add",
+             dependencies=[Depends(PermissionChecker(per="account:source:add"))],
              response_model=RestfulRes[str],
              status_code=fastapi.status.HTTP_200_OK)
-async def source_delete(
+async def source_upload(
         id: int,
         repo: SourceRepository = fastapi.Depends(get_repository(repo_type=SourceRepository))
 ) -> RestfulRes[str]:
@@ -102,9 +102,10 @@ async def source_delete(
     return RestfulRes.success()
 
 
+
 @router.post(path="/import",
-             name="embeddings:source:import",
-             dependencies=[Depends(PermissionChecker(per="account:source:import"))],
+             name="embeddings:source:add",
+             dependencies=[Depends(PermissionChecker(per="account:source:add"))],
              response_model=RestfulRes[str],
              status_code=fastapi.status.HTTP_200_OK)
 async def source_import(

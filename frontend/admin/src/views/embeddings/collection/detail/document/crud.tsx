@@ -90,7 +90,7 @@ export default function ({ crudExpose, context }: CreateCrudOptionsProps): Creat
             },
             helper: "以【title \\n content】格式拼接后计算向量数据"
           },
-          editForm: { component: { disabled: true } },
+          editForm: { component: { disabled: false } },
           column: {
             sorter: true
           }

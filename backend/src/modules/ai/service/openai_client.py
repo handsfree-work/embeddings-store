@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 import loguru
@@ -68,6 +69,8 @@ class OpenAiClient:
         openai.api_base = settings.openai.api_base
         openai.api_version = settings.openai.api_version
         openai.api_type = settings.openai.api_type
+        openai.proxy = settings.openai.proxy
+
         if isinstance(model, str):
             model = model_registry.get(model)
         self.model_name = model.name

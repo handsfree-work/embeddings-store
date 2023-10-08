@@ -98,6 +98,7 @@ class OpenAiSettings(BaseSettings, case_sensitive=False):
     api_version: str = ""
     api_type: str = "azure"
     api_engine: str = "gpt-35-turbo-0613"
+    proxy: str | None = None
 
 
 class VectorStore(BaseSettings, case_sensitive=False):

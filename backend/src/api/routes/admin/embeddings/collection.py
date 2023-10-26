@@ -83,7 +83,7 @@ async def collection_update(
         repo: CollectionRepository = Depends(get_repository(repo_type=CollectionRepository)),
 ) -> EmCollectionEntity:
     try:
-        for_update = await repo.update_with_roles(collection.id, collection)
+        for_update = await repo.update(collection.id, collection)
     except EntityDoesNotExist:
         return RestfulRes.error(message="集合不存在")
 

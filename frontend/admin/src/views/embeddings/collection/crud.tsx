@@ -1,6 +1,6 @@
 import * as api from "./api";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, dict, EditReq, UserPageQuery, UserPageRes } from "@fast-crud/fast-crud";
-import {useRouter} from "vue-router";
+import { useRouter } from "vue-router";
 
 export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOptionsRet {
   const pageRequest = async (query: UserPageQuery): Promise<UserPageRes> => {
@@ -18,7 +18,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
     return await api.AddObj(form);
   };
 
-  const router = useRouter()
+  const router = useRouter();
   return {
     crudOptions: {
       request: {
@@ -56,13 +56,13 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
               { max: 50, message: "最大50个字符" }
             ]
           },
-          editForm: { component: { disabled: true } },
+          editForm: { component: { disabled: false } },
           column: {
             sorter: true,
-            component:{
-              on:{
-                onClick({row}){
-                  router.push({path:`/embeddings/collection/detail`,query:{id:row.id}})
+            component: {
+              on: {
+                onClick({ row }) {
+                  router.push({ path: `/embeddings/collection/detail`, query: { id: row.id } });
                 }
               }
             }
@@ -78,13 +78,13 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
               { max: 50, message: "最大50个字符" }
             ]
           },
-          editForm: { component: { disabled: true } },
+          editForm: { component: { disabled: false } },
           column: {
             sorter: true,
-            component:{
-              on:{
-                onClick({row}){
-                  router.push({path:`/embeddings/collection/detail`,query:{id:row.id}})
+            component: {
+              on: {
+                onClick({ row }) {
+                  router.push({ path: `/embeddings/collection/detail`, query: { id: row.id } });
                 }
               }
             }
@@ -117,7 +117,7 @@ export default function ({ crudExpose }: CreateCrudOptionsProps): CreateCrudOpti
             sortable: "update_time",
             width: 180
           }
-        },
+        }
       }
     }
   };

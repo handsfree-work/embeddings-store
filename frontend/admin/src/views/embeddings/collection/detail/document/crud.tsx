@@ -1,7 +1,7 @@
 import * as api from "./api";
 import { AddReq, CreateCrudOptionsProps, CreateCrudOptionsRet, DelReq, dict, EditReq, UserPageQuery, UserPageRes } from "@fast-crud/fast-crud";
 
-export default function ({ crudExpose, context }: CreateCrudOptionsProps): CreateCrudOptionsRet {
+export default function ({ context }: CreateCrudOptionsProps): CreateCrudOptionsRet {
   const pageRequest = async (query: UserPageQuery): Promise<UserPageRes> => {
     return await api.GetList(query);
   };
@@ -71,7 +71,7 @@ export default function ({ crudExpose, context }: CreateCrudOptionsProps): Creat
               autoSize: { minRows: 3, maxRows: 6 }
             }
           },
-          editForm: { component: { disabled: true } },
+          editForm: { component: { disabled: false } },
           column: {
             sorter: true
           }

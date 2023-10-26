@@ -5,10 +5,10 @@
       <div class="user-layout-content">
         <div class="top flex flex-col items-center justify-center">
           <div class="header flex flex-row items-center">
-            <img src="/images/logo/rect-black.svg" class="logo" alt="logo" />
-            <span class="title">宝德AI客服系统</span>
+            <img src="/images/logo/logo.png" class="logo" alt="logo" />
+            <span class="title">embeddings-store</span>
           </div>
-          <div class="desc">GPT智慧客服</div>
+          <div class="desc">嵌入数据仓库，向量搜索引擎</div>
         </div>
 
         <router-view />
@@ -19,7 +19,7 @@
             <a href="_self">隐私</a>
             <a href="_self">条款</a>
           </div>
-          <div class="copyright">Copyright &copy; 2022 Powerleader</div>
+          <div class="copyright">Copyright &copy; 2023 handsfree.work</div>
         </div>
       </div>
     </div>

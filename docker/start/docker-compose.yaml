@@ -12,9 +12,22 @@ services:
       # 这里的配置只有首次运行生效。修改后，重启镜像是不会生效的。需要把持久化数据删除再重启，才有效果
       - POSTGRES_USER=handsfree
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=embeddings_store
+      - POSTGRES_DB=vector_store
     volumes:
       - ./data/pgvector:/var/lib/postgresql/data
+  pgdb:
+    image: postgres:14 # git
+    container_name: pgdb
+    restart: always
+    ports: # 生产环境建议不要暴露
+      - 5432:5432
+    environment:
+      # 这里的配置只有首次运行生效。修改后，重启镜像是不会生效的。需要把持久化数据删除再重启，才有效果
+      - POSTGRES_USER=handsfree
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=embeddings_store
+    volumes:
+      - ./data/pgdb:/var/lib/postgresql/data
   em-store:
     image: registry.cn-shenzhen.aliyuncs.com/handsfree/embeddings-store:latest
     container_name: em-store # 容器名
@@ -28,10 +41,10 @@ services:
       - basic_jwt_subject=changeit
       - basic_db_postgres_db=embeddings_store
       - basic_db_postgres_password=123456
-      - basic_db_postgres_port=5433
+      - basic_db_postgres_port=5432
       - basic_db_postgres_username=handsfree
       - basic_db_postgres_host=192.168.43.240
-      - vs_pg_uri=postgresql+asyncpg://handsfree:123456@192.168.43.240:5433/embeddings_store
+      - vs_pg_uri=postgresql+asyncpg://handsfree:123456@192.168.43.240:5433/vector_store
       - basic_server_workers=1
       - openai_api_key=sk-xxxx
       - openai_api_base=https://api.openai.com/v1/

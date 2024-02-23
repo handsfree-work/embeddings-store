@@ -21,6 +21,7 @@ class Document(Base):
     title = mapped_column(Text)
     content = mapped_column(Text)
     embedding = mapped_column(Vector(1536))
+    embedding_half = mapped_column(Vector(768))
     created_at: Mapped[datetime.datetime] = mapped_column(
         sqlalchemy.DateTime(timezone=True), nullable=False, server_default=functions.now()
     )

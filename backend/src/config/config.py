@@ -50,14 +50,15 @@ class BasicSettings(BaseSettings, case_sensitive=True):
 
     is_allowed_credentials: bool = True
     allowed_origins: list[str] = [
-        "http://localhost:3000",  # react default port
-        "http://0.0.0.0:3000",
-        "http://127.0.0.1:3000",  # react docker port
-        "http://127.0.0.1:3001",
-        "http://localhost:5173",  # qwik default port
-        "http://0.0.0.0:5173",
-        "http://127.0.0.1:5173",  # qwik docker port
-        "http://127.0.0.1:5174",
+        # "http://localhost:3000",  # react default port
+        # "http://0.0.0.0:3000",
+        # "http://127.0.0.1:3000",  # react docker port
+        # "http://127.0.0.1:3001",
+        # "http://localhost:5173",  # qwik default port
+        # "http://0.0.0.0:5173",
+        # "http://127.0.0.1:5173",  # qwik docker port
+        # "http://127.0.0.1:5174",
+        "*"
     ]
     allowed_methods: list[str] = ["*"]
     allowed_headers: list[str] = ["*"]
@@ -101,7 +102,7 @@ class OpenAiSettings(BaseSettings, case_sensitive=False):
     proxy: str | None = None
 
 
-class VectorStore(BaseSettings, case_sensitive=False):
+class VectorStoreSettings(BaseSettings, case_sensitive=False):
     model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='vs_')
 
     type: str = "pgvector"
@@ -109,9 +110,23 @@ class VectorStore(BaseSettings, case_sensitive=False):
     pg_migrations_dir: str = ""
 
 
+class EmbeddingSettings(BaseSettings, case_sensitive=False):
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='embedding_')
+
+    provider: str = "openai"  # openai or  local
+
+
+class LocalAiSettings(BaseSettings, case_sensitive=False):
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='local_ai_')
+
+    embedding_url: str ="http://127.0.0.1:9901/api/embedding"
+
+
 class Settings:
     openai = OpenAiSettings()
-    vector_store = VectorStore()
+    embedding = EmbeddingSettings()
+    localAi = LocalAiSettings()
+    vector_store = VectorStoreSettings()
     base = BasicSettings()
 
 

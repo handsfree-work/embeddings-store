@@ -6,25 +6,11 @@ import openai
 from openai import InvalidRequestError
 
 from src.config.config import settings
+from src.modules.ai.models.ai_model import ChatRequest, EmbeddingRequest, ChatMessage
 from src.modules.base.models.schemas.base import BaseSchemaModel, BaseAnyModel
 from src.utilities.exceptions.biz.biz_common import client_error
 
 
-class ChatMessage(BaseSchemaModel):
-    role: str
-    name: str | None = None
-    content: Optional[str] = None
-    function_call: dict | None = None
-
-
-class ChatRequest(BaseSchemaModel):
-    messages: list[ChatMessage]
-    functions: list[dict] | None = None
-    temperature: float | None = None
-
-
-class EmbeddingRequest(BaseSchemaModel):
-    input: str
 
 
 class OpenAiModel(BaseSchemaModel):

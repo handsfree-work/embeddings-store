@@ -25,6 +25,7 @@ class EmDocumentEntity(BaseSchemaModel):
     title: str | None = None
     content: str | None = None
     embedding: List[float] | None = None
+    embedding_half: List[float] | None = None
     score: float | None = None
 
     def get_embedding_content(self) -> str:

@@ -16,6 +16,7 @@ class EmCollectionEntity(BaseSchemaModel):
     id: int | None = None
     created_at: datetime.datetime | None = None
     updated_at: datetime.datetime | None = None
+    # provider: str | None = "openai"
     title: str | None = None
     key: str | None = None
     status: str | None = None
@@ -34,8 +35,8 @@ class EmCollection(Base):
     )
 
     key: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=False, unique=True)
-    title: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=False,
-                                       unique=False)
+    # provider: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=True, unique=False)
+    title: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=False,unique=False)
     status: Mapped[str] = mapped_column(sqlalchemy.String(length=64), nullable=True, unique=False)
 
     __mapper_args__ = {"eager_defaults": True}

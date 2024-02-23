@@ -63,10 +63,13 @@ class PgvectorStore(AbstractVectorStore):
             repo = self.create_repo(session=session)
             await repo.delete_where(options=SelectOptions().with_where(Document.collection_id == collection_id))
 
-    async def search(self, query_embedding: list[float], top_k: int = 10, condition: EmDocumentEntity = None) -> list[
+    async def search(self, query_embedding: list[float], top_k: int = 10, condition: EmDocumentEntity = None,half:bool = False) -> list[
         EmDocumentEntity]:
         async with transaction() as session:
-            score_ = Document.embedding.l2_distance(query_embedding).label("score")
+            if half:
+                score_ = Document.embedding_half.l2_distance(query_embedding).label("score")
+            else:
+                score_ = Document.embedding.l2_distance(query_embedding).label("score")
             stmt = select(Document.id,
                           Document.title,
                           Document.content,

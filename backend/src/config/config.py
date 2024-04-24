@@ -7,7 +7,7 @@ env_files = ('.env', f'.env.{env}')
 
 
 class BasicSettings(BaseSettings, case_sensitive=True):
-    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='basic_')
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', extra="allow", env_prefix='basic_')
 
     environment: str = "dev"
     title: str = "embeddings store service"
@@ -92,7 +92,7 @@ class BasicSettings(BaseSettings, case_sensitive=True):
 
 
 class OpenAiSettings(BaseSettings, case_sensitive=False):
-    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='openai_')
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8',extra="allow",  env_prefix='openai_')
 
     api_key: str = ""
     api_base: str = ""
@@ -103,7 +103,7 @@ class OpenAiSettings(BaseSettings, case_sensitive=False):
 
 
 class VectorStoreSettings(BaseSettings, case_sensitive=False):
-    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='vs_')
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8',extra="allow", env_prefix='vs_')
 
     type: str = "pgvector"
     pg_uri: str = "postgresql+psycopg://localhost/pgvector_example"
@@ -111,15 +111,15 @@ class VectorStoreSettings(BaseSettings, case_sensitive=False):
 
 
 class EmbeddingSettings(BaseSettings, case_sensitive=False):
-    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='embedding_')
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', extra="allow", env_prefix='embedding_')
 
     provider: str = "openai"  # openai or  local
 
 
 class LocalAiSettings(BaseSettings, case_sensitive=False):
-    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', env_prefix='local_ai_')
+    model_config = SettingsConfigDict(env_file=env_files, env_file_encoding='utf-8', extra="allow", env_prefix='local_ai_')
 
-    embedding_url: str ="http://127.0.0.1:9901/api/embedding"
+    embedding_url: str = "http://127.0.0.1:9901/api/embedding"
 
 
 class Settings:

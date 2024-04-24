@@ -32,7 +32,8 @@ pydantic-settings
 pydantic
 trio
 uvicorn==0.21.1
-openai
+openai==0.28.1
 tiktoken
 pgvector
 cachetools
+aiohttp

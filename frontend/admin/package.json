@@ -1,6 +1,6 @@
 {
   "name": "@fast-crud/fs-admin-antdv4",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "debug": "vite --mode debug",
     "debug:pm": "vite --mode debugpm",
     "debug:force": "vite --force --mode debug",
-    "build": "npm run tsc && vite build ",
+    "build": "vite build ",
     "serve": "vite preview",
     "preview": "vite preview",
     "pretty-quick": "pretty-quick",
